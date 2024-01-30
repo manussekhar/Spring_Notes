@@ -27,10 +27,49 @@ sonable guesses at what components need to be configured and wired together, bas
 on entries in the classpath, environment variables, and other factors.
 
 **Spring boot pom structure**
-
+Parent
+------------
 The first thing to take note of is the <parent> element and, more specifically, its
 <version> child. This specifies that your project has spring-boot-starter-parent
 as its parent POM. Among other things, this parent POM provides dependency
 management for several libraries commonly used in Spring projects. For those
 libraries covered by the parent POM, you won’t have to specify a version, because it’s
 inherited from the parent. 
+
+Starter Dependencies
+----------------------
+Spring Boot starter dependencies are spe-
+cial in that they typically don’t have any library code themselves but instead transi-
+tively pull in other libraries. These starter dependencies offer the following primary
+benefits:
+ Your build file will be significantly smaller and easier to manage because you
+won’t need to declare a dependency on every library you might need.
+ You’re able to think of your dependencies in terms of what capabilities they
+provide, rather than their library names. If you’re developing a web application,
+you’ll add the web starter dependency rather than a laundry list of individual
+libraries that enable you to write a web application.
+ You’re freed from the burden of worrying about library versions. You can trust
+that the versions of the libraries brought in transitively will be compatible for a
+given version of Spring Boot. You need to worry only about which version of
+Spring Boot you’re using.
+
+Spring Boot plugin
+--------------------
+ It provides a Maven goal that enables you to run the application using Maven.
+ It ensures that all dependency libraries are included within the executable JAR
+file and available on the runtime classpath.
+ It produces a manifest file in the JAR file that denotes the bootstrap class
+(TacoCloudApplication, in your case) as the main class for the executable JAR.
+
+
+@SpringBootApplication - composite annotation that consists of
+1. @SpringBootConfiguration—Designates this class as a configuration class
+2. @EnableAutoConfiguration—Enables Spring Boot automatic configuration.
+3. @ComponentScan—Enables component scanning. This lets you declare other
+classes with annotations like @Component, @Controller, and @Service to have
+Spring automatically discover and register them as components in the Spring
+application context.
+
+@SpringBootTest - which is itself annotated with @ExtendWith(SpringExtension.class), to
+add Spring testing capabilities to JUnit 5
+
